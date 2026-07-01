@@ -97,6 +97,10 @@ func TestStorageLockSemantics(t *testing.T, factory StorageLockTestFactory) {
 		{"ConcurrentCompetition", testConcurrentCompetition},
 		{"NonOwnerUnlock", testNonOwnerUnlock},
 		{"ReacquireAfterRelease", testReacquireAfterRelease},
+		{"WatchDogDoesNotClobberStolenLock", testWatchDogDoesNotClobberStolenLock},
+		{"ABAScenario", testABAScenario},
+		{"GoroutineLeak", testGoroutineLeak},
+		{"ReentrantLockExpirationDuringHolding", testReentrantLockExpirationDuringHolding},
 	}
 
 	for _, c := range cases {
