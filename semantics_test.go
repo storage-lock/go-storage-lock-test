@@ -18,5 +18,11 @@ func TestFileSystemStorageLockSemantics(t *testing.T) {
 	TestStorageLockSemantics(t, factory)
 }
 
+// TestTombstoneReleasePath 验证"不支持原子条件删除"的存储介质（如对象存储）
+// 能通过墓碑降级路径正确释放与抢占锁，互斥性不被破坏。
+func TestTombstoneReleasePath(t *testing.T) {
+	testTombstoneReleasePath(t)
+}
+
 // 确保 context 被使用（某些 factory 可能需要）
 var _ = context.Background
