@@ -101,9 +101,19 @@ func testABAScenario(t *testing.T, ctx context.Context, factory StorageLockTestF
 	err = lock.UnLock(ctx, ownerA)
 	assert.Nil(t, err)
 
-	// 读取 A 释放后的状态（锁应已删除）
-	_, err = s.Get(ctx, lockId)
-	assert.NotNil(t, err, "lock should be deleted after A releases")
+	// 读取 A 释放后的状态
+	// 对于支持原子删除的存储，锁记录应被删除（Get 返回 ErrLockNotFound）
+	// 对于走墓碑路径的存储（如 S3），记录仍存在但 LockCount=0
+	releaseJson, releaseErr := s.Get(ctx, lockId)
+	if releaseErr == nil {
+		// 墓碑路径：记录仍存在，验证是墓碑（LockCount=0）
+		releaseInfo, err := storage.LockInformationFromJsonString(releaseJson)
+		assert.Nil(t, err)
+		assert.Equal(t, 0, releaseInfo.LockCount, "tombstone path: LockCount should be 0 after release")
+	} else {
+		// 原子删除路径：记录应被删除
+		assert.NotNil(t, releaseErr, "atomic delete path: lock should be deleted after A releases")
+	}
 
 	// B 持有并释放
 	err = lock.Lock(ctx, ownerB)

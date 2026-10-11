@@ -30,6 +30,8 @@
 //   - 并发竞争（多协程争抢，最终只有一个成功，临界区互斥）
 //   - 非持有者解锁（应失败）
 //   - 释放后可被他人重新获取
+//   - 公平排队（TestStorageLock_FairQueueSemantics：登记顺序跨实例生效，
+//     没开公平选项的客户端不能插队，队首取消后下一位接手）
 package storage_lock_test
 
 import (
@@ -101,6 +103,8 @@ func TestStorageLockSemantics(t *testing.T, factory StorageLockTestFactory) {
 		{"ABAScenario", testABAScenario},
 		{"GoroutineLeak", testGoroutineLeak},
 		{"ReentrantLockExpirationDuringHolding", testReentrantLockExpirationDuringHolding},
+		{"TryLockSuccess", testTryLockSuccess},
+		{"TryLockFailWhenLocked", testTryLockFailWhenLocked},
 	}
 
 	for _, c := range cases {

@@ -20,6 +20,10 @@
 | `ConcurrentCompetition` | 并发竞争：多协程争抢，临界区完全互斥，计数器无丢失无重复 |
 | `NonOwnerUnlock` | 非持有者解锁应失败 |
 | `ReacquireAfterRelease` | 释放后可被他人重新获取 |
+| `FairQueue/ArrivalOrder` | 跨实例先来先服务：后创建的实例先登记，就先拿到锁 |
+| `FairQueue/CanceledHeadHandsOff` | 队首取消后，下一位从存储队列里接手 |
+| `FairQueue/UnfairClientCannotCut` | 没开公平选项的客户端不能插到已排队的人前面 |
+| `FairQueue/ConcurrentArrival` | 多个竞争者同时登记，临界区依次进入且不重复 |
 
 ## 使用方法
 
@@ -71,11 +75,22 @@ func TestMyStorageLockSemantics(t *testing.T) {
 
 ## 框架自带的测试
 
-本框架自带 `MemoryStorage` 和 `FileSystemStorage` 的 factory 实现和测试，用于验证框架本身可用：
+不依赖外部服务的后端一次跑完：
 
 ```bash
-go test -v -timeout 90s ./...
+go test -count=1 -timeout 60m -run TestLocalBackends .
 ```
+
+覆盖 memory、filesystem、leveldb、kv、http、sqlite3。
+
+全部后端（含依赖外部服务的）用 `run-all.sh`。它先导出每个服务的连接环境变量，再跑整个包的测试；哪个服务没在监听，对应的 `Test*StorageLockSemantics` 就跳过，不会让整次运行失败。RocksDB 不需要服务，但需要本机的 `librocksdb`。
+
+```bash
+docker compose -f docker/docker-compose.yml up -d
+./run-all.sh
+```
+
+`docker/docker-compose.yml` 里的端口刻意避开默认值（Redis 16379、MySQL 13307、PostgreSQL 15432、memcache 11212、LedisDB 16380），避免和机器上已有的实例冲突。环境变量已设置时脚本沿用已有的值。
 
 ## 设计要点
 

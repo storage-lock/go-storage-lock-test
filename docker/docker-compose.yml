@@ -1,0 +1,44 @@
+# 语义测试依赖的外部服务。端口都避开常见默认值，避免和本机已有实例冲突。
+# 启动：docker compose -f docker/docker-compose.yml up -d
+services:
+  redis:
+    image: redis:7-alpine
+    ports: ["16379:6379"]
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.17
+    command: ["etcd", "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://0.0.0.0:2379"]
+    ports: ["2379:2379"]
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: storage_lock_test
+    ports: ["13307:3306"]
+  postgresql:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_PASSWORD: pgpass
+      POSTGRES_DB: storage_lock_test
+    ports: ["15432:5432"]
+  mongodb:
+    image: mongo:7
+    ports: ["27017:27017"]
+  minio:
+    image: minio/minio:RELEASE.2024-05-28T17-19-04Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports: ["9000:9000", "9001:9001"]
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: "2181"
+      ZOOKEEPER_TICK_TIME: "2000"
+    ports: ["2181:2181"]
+  memcached:
+    image: memcached:1.6-alpine
+    ports: ["11212:11211"]
+  ledisdb:
+    image: ledisdb/ledisdb:latest
+    ports: ["16380:6380"]

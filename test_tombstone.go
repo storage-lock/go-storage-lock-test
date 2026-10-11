@@ -83,3 +83,60 @@ func testTombstoneReleasePath(t *testing.T) {
 	// 清理
 	_ = lock.UnLock(ctx, owner2)
 }
+
+// testTombstoneRLockReclaim 验证 RLock 对墓碑记录的抢占：
+// 曾经的 BUG：tryRLock 遇到过期/墓碑（LockCount==0）记录时统一调用 rlockCreate，
+// 而 rlockCreate 内部用 CreateWithVersion（只适用于记录真正不存在的场景）。对于不支持
+// 原子删除、走墓碑释放的存储，记录一直都在，CreateWithVersion 只会不断返回
+// ErrLockAlreadyExists，rlockCreate 对该错误的处理又是回退到 tryRLock 重新判断，
+// 形成死循环，RLock 永远卡在 sleep-retry（context.Background() 不会超时，直接卡死）。
+// 修复后 tryRLock 遇到过期/墓碑记录改为 rlockReclaim（UpdateWithVersion 抢占），与写锁
+// lockExpired 的处理方式一致。
+func testTombstoneRLockReclaim(t *testing.T) {
+	ctx := context.Background()
+
+	inner := memory_storage.NewMemoryStorage()
+	s := &noAtomicDeleteStorage{Storage: inner}
+
+	lockId := "test-TombstoneRLockReclaim"
+	options := storage_lock.NewStorageLockOptionsWithLockId(lockId)
+	options.LeaseExpireAfter = time.Second * 3
+	options.LeaseRefreshInterval = time.Second * 1
+	options.VersionMissRetryInterval = time.Millisecond * 5
+	lock, err := storage_lock.NewStorageLockWithOptions(s, options)
+	assert.Nil(t, err)
+
+	// 写锁加锁、解锁，留下墓碑记录（LockCount=0）
+	writer := "owner-write"
+	assert.Nil(t, lock.WLock(ctx, writer))
+	assert.Nil(t, lock.WUnLock(ctx, writer))
+
+	// 读锁应能立即抢占墓碑记录，而不是卡死在 sleep-retry 死循环里
+	reader := "owner-read"
+	done := make(chan error, 1)
+	go func() {
+		done <- lock.RLock(ctx, reader)
+	}()
+	select {
+	case err := <-done:
+		assert.Nil(t, err, "读锁应能抢占墓碑记录成功")
+	case <-time.After(2 * time.Second):
+		t.Fatal("RLock 抢占墓碑记录超时未返回 -- 死循环回归")
+	}
+
+	// 读锁释放后再走一次墓碑，验证写锁也能正常抢占读锁留下的墓碑
+	assert.Nil(t, lock.RUnLock(ctx, reader))
+
+	writer2 := "owner-write-2"
+	done2 := make(chan error, 1)
+	go func() {
+		done2 <- lock.WLock(ctx, writer2)
+	}()
+	select {
+	case err := <-done2:
+		assert.Nil(t, err, "写锁应能抢占读锁留下的墓碑记录成功")
+	case <-time.After(2 * time.Second):
+		t.Fatal("WLock 抢占墓碑记录超时未返回")
+	}
+	_ = lock.WUnLock(ctx, writer2)
+}
