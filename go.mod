@@ -8,24 +8,24 @@ require (
 	github.com/golang-infrastructure/go-iterator v0.0.0-20230524171120-56988a9b127c
 	github.com/minio/minio-go/v7 v7.2.1
 	github.com/redis/go-redis/v9 v9.22.0
-	github.com/storage-lock/go-etcd-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-events v0.0.3
-	github.com/storage-lock/go-filesystem-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-http-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-kv-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-ledisdb-storage v0.0.0-20260805170332-43bc479fb497
-	github.com/storage-lock/go-leveldb-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-memcache-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-memory-storage v0.0.0
-	github.com/storage-lock/go-mysql-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-postgresql-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-redis-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-rocksdb-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-s3-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-sqlite3-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-storage v0.0.2
-	github.com/storage-lock/go-storage-lock v0.0.5
-	github.com/storage-lock/go-zookeeper-storage v0.0.0-00010101000000-000000000000
+	github.com/storage-lock/go-etcd-storage v0.0.1
+	github.com/storage-lock/go-events v0.0.4
+	github.com/storage-lock/go-filesystem-storage v0.0.1
+	github.com/storage-lock/go-http-storage v0.0.1
+	github.com/storage-lock/go-kv-storage v0.0.1
+	github.com/storage-lock/go-ledisdb-storage v0.0.1
+	github.com/storage-lock/go-leveldb-storage v0.0.1
+	github.com/storage-lock/go-memcache-storage v0.0.1
+	github.com/storage-lock/go-memory-storage v0.0.1
+	github.com/storage-lock/go-mysql-storage v0.0.3
+	github.com/storage-lock/go-postgresql-storage v0.0.3
+	github.com/storage-lock/go-redis-storage v0.0.1
+	github.com/storage-lock/go-rocksdb-storage v0.0.1
+	github.com/storage-lock/go-s3-storage v0.0.2
+	github.com/storage-lock/go-sqlite3-storage v0.0.2
+	github.com/storage-lock/go-storage v0.0.3
+	github.com/storage-lock/go-storage-lock v0.0.6
+	github.com/storage-lock/go-zookeeper-storage v0.0.1
 	github.com/stretchr/testify v1.11.1
 	go.etcd.io/etcd/client/v3 v3.5.17
 	go.mongodb.org/mongo-driver v1.12.1
@@ -37,7 +37,7 @@ require (
 	github.com/linxGnu/grocksdb v1.8.9 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
-	github.com/storage-lock/go-sql-based-storage v0.0.0-20230903181730-3e91a672a521 // indirect
+	github.com/storage-lock/go-sql-based-storage v0.0.2 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
@@ -68,9 +68,9 @@ require (
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/xid v1.6.0 // indirect
-	github.com/storage-lock/go-mongodb-storage v0.0.0-00010101000000-000000000000
-	github.com/storage-lock/go-ntp-time-provider v0.0.1 // indirect
-	github.com/storage-lock/go-storage-events v0.0.5 // indirect
+	github.com/storage-lock/go-mongodb-storage v0.0.1
+	github.com/storage-lock/go-ntp-time-provider v0.0.3 // indirect
+	github.com/storage-lock/go-storage-events v0.0.6 // indirect
 	github.com/storage-lock/go-utils v0.0.2 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/tinylib/msgp v1.6.1 // indirect
@@ -113,7 +113,3 @@ replace (
 	github.com/storage-lock/go-storage-lock => ../go-storage-lock
 	github.com/storage-lock/go-zookeeper-storage => ../go-zookeeper-storage
 )
-
-replace github.com/storage-lock/go-mongodb-storage => ../go-mongodb-storage
-
-replace github.com/storage-lock/go-ntp-time-provider => ../go-ntp-time-provider
