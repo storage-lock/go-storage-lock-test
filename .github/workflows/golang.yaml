@@ -1,0 +1,72 @@
+name: Go package
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: go-storage-lock-test
+
+      # go.mod 用本地 replace 指向平级兄弟仓库。批量克隆所有被 replace 的兄弟，
+      # 让独立构建在未发布版本间保持自洽（避免拉发布版导致语义回退）。
+      - name: Checkout sibling repositories
+        shell: bash
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          siblings="
+          github.com/storage-lock/go-etcd-storage:go-etcd-storage
+          github.com/storage-lock/go-events:go-events
+          github.com/storage-lock/go-filesystem-storage:go-filesystem-storage
+          github.com/storage-lock/go-http-storage:go-http-storage
+          github.com/storage-lock/go-kv-storage:go-kv-storage
+          github.com/storage-lock/go-ledisdb-storage:go-ledisdb-storage
+          github.com/storage-lock/go-leveldb-storage:go-leveldb-storage
+          github.com/storage-lock/go-memcache-storage:go-memcache-storage
+          github.com/storage-lock/go-memory-storage:go-memory-storage
+          github.com/storage-lock/go-mysql-storage:go-mysql-storage
+          github.com/storage-lock/go-postgresql-storage:go-postgresql-storage
+          github.com/storage-lock/go-redis-storage:go-redis-storage
+          github.com/storage-lock/go-rocksdb-storage:go-rocksdb-storage
+          github.com/storage-lock/go-s3-storage:go-s3-storage
+          github.com/storage-lock/go-sql-based-storage:go-sql-based-storage
+          github.com/storage-lock/go-sqlite3-storage:go-sqlite3-storage
+          github.com/storage-lock/go-storage:go-storage
+          github.com/storage-lock/go-storage-lock:go-storage-lock
+          github.com/storage-lock/go-zookeeper-storage:go-zookeeper-storage
+          "
+          for pair in $siblings; do
+            repo="${pair%%:*}"
+            dir="${pair##*:}"
+            git clone --depth 1 "https://github.com/${repo}.git" "${dir}"
+          done
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Install RocksDB (cgo dependency)
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librocksdb-dev
+
+      - name: Build
+        working-directory: go-storage-lock-test
+        run: go build ./...
+
+      - name: Vet
+        working-directory: go-storage-lock-test
+        run: go vet ./...
+
+      # 外部服务后端（redis/etcd/mysql/mongo/s3 等）由环境变量保护自动 skip，
+      # 这里跑的是不需要外部服务的本地后端语义套件。
+      - name: Test
+        working-directory: go-storage-lock-test
+        run: go test -race -count=1 ./...

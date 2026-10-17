@@ -1,4 +1,4 @@
-package storage_lock_test
+package storage_lock
 
 import (
 	"context"

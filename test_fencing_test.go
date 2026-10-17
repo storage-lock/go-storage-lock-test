@@ -8,6 +8,7 @@ import (
 
 	memory_storage "github.com/storage-lock/go-memory-storage"
 	storage_lock "github.com/storage-lock/go-storage-lock"
+	framework "github.com/storage-lock/go-storage-lock-test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,7 +35,7 @@ func testFencingTokenMonotonic(t *testing.T) {
 		options.LeaseRefreshInterval = time.Second * 1
 		options.VersionMissRetryInterval = time.Millisecond * 5
 		// 关键：用 NoopWatchDog，持锁后不续租，租约会自然过期，从而能被抢占
-		options.WatchDogFactory = &NoopWatchDogFactory{}
+		options.WatchDogFactory = &framework.NoopWatchDogFactory{}
 		lock, err := storage_lock.NewStorageLockWithOptions(sharedStorage, options)
 		assert.Nil(t, err)
 		return lock

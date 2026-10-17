@@ -1,4 +1,4 @@
-// Package storage_lock_test 提供分布式锁语义的测试框架
+// Package storage_lock 提供分布式锁语义的测试框架。
 //
 // 本包用于验证基于 storage-lock 框架的存储实现是否正确实现了分布式锁的核心语义。
 // 一个 Storage 实现即使通过了 go-storage-test-helper 的 CRUD 测试，也未必能正确支持
@@ -32,7 +32,7 @@
 //   - 释放后可被他人重新获取
 //   - 公平排队（TestStorageLock_FairQueueSemantics：登记顺序跨实例生效，
 //     没开公平选项的客户端不能插队，队首取消后下一位接手）
-package storage_lock_test
+package storage_lock
 
 import (
 	"context"

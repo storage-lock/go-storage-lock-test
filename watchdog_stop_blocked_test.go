@@ -9,6 +9,7 @@ import (
 	"github.com/golang-infrastructure/go-iterator"
 	"github.com/storage-lock/go-storage"
 	storage_lock "github.com/storage-lock/go-storage-lock"
+	framework "github.com/storage-lock/go-storage-lock-test"
 )
 
 // slowStorage 装饰一个真实 Storage，在指定的写/读方法上人为阻塞到 ctx 取消，
@@ -108,7 +109,7 @@ func (s *slowStorage) List(ctx context.Context) (iterator.Iterator[*storage.Lock
 // 不监听 stop/runCtx，Stop 无法打断卡在存储 RPC 里的 goroutine。
 // 修复后：子 ctx 从 runCtx 派生，Stop 调 runCancel 取消它，存储调用立刻返回。
 func TestWatchDogStopInterruptsBlockedStorageRPC(t *testing.T) {
-	factory := NewMemoryStorageFactory()
+	factory := framework.NewMemoryStorageFactory()
 	ctx := context.Background()
 	storageImpl := factory.CreateStorage(ctx, t)
 

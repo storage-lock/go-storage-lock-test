@@ -113,3 +113,5 @@ replace (
 	github.com/storage-lock/go-storage-lock => ../go-storage-lock
 	github.com/storage-lock/go-zookeeper-storage => ../go-zookeeper-storage
 )
+
+replace github.com/storage-lock/go-events => ../go-events
