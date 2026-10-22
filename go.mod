@@ -92,24 +92,3 @@ require (
 	gopkg.in/ini.v1 v1.67.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace (
-	github.com/storage-lock/go-etcd-storage => ../go-etcd-storage
-	github.com/storage-lock/go-filesystem-storage => ../go-filesystem-storage
-	github.com/storage-lock/go-http-storage => ../go-http-storage
-	github.com/storage-lock/go-kv-storage => ../go-kv-storage
-	github.com/storage-lock/go-ledisdb-storage => ../go-ledisdb-storage
-	github.com/storage-lock/go-leveldb-storage => ../go-leveldb-storage
-	github.com/storage-lock/go-memcache-storage => ../go-memcache-storage
-	github.com/storage-lock/go-memory-storage => ../go-memory-storage
-	github.com/storage-lock/go-mysql-storage => ../go-mysql-storage
-	github.com/storage-lock/go-postgresql-storage => ../go-postgresql-storage
-	github.com/storage-lock/go-redis-storage => ../go-redis-storage
-	github.com/storage-lock/go-rocksdb-storage => ../go-rocksdb-storage
-	github.com/storage-lock/go-s3-storage => ../go-s3-storage
-	github.com/storage-lock/go-sql-based-storage => ../go-sql-based-storage
-	github.com/storage-lock/go-sqlite3-storage => ../go-sqlite3-storage
-	github.com/storage-lock/go-storage => ../go-storage
-	github.com/storage-lock/go-storage-lock => ../go-storage-lock
-	github.com/storage-lock/go-zookeeper-storage => ../go-zookeeper-storage
-)
