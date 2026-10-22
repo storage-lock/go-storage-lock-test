@@ -16,6 +16,8 @@ jobs:
       # Integration tests use sibling storage modules; clone them from the organization
       # and keep go.mod replace directives aligned with these directories.
       - name: Checkout sibling repositories
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           cd "$GITHUB_WORKSPACE"
@@ -42,7 +44,7 @@ jobs:
           for pair in $siblings; do
             repo="${pair%%:*}"
             dir="${pair##*:}"
-            git clone --depth 1 "https://github.com/${repo}.git" "${dir}"
+            git clone --depth 1 "https://x-access-token:${GITHUB_TOKEN}@github.com/${repo}.git" "${dir}"
           done
 
       - name: Set up Go
