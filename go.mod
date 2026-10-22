@@ -9,7 +9,7 @@ require (
 	github.com/minio/minio-go/v7 v7.2.1
 	github.com/redis/go-redis/v9 v9.22.0
 	github.com/storage-lock/go-etcd-storage v0.0.1
-	github.com/storage-lock/go-events v0.0.4
+	github.com/storage-lock/go-events v0.0.5
 	github.com/storage-lock/go-filesystem-storage v0.0.1
 	github.com/storage-lock/go-http-storage v0.0.1
 	github.com/storage-lock/go-kv-storage v0.0.1
@@ -113,5 +113,3 @@ replace (
 	github.com/storage-lock/go-storage-lock => ../go-storage-lock
 	github.com/storage-lock/go-zookeeper-storage => ../go-zookeeper-storage
 )
-
-replace github.com/storage-lock/go-events => ../go-events
