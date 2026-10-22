@@ -13,39 +13,11 @@ jobs:
         with:
           path: go-storage-lock-test
 
-      # Integration tests use sibling storage modules; clone them from the organization
-      # and keep go.mod replace directives aligned with these directories.
-      - name: Checkout sibling repositories
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          siblings="
-          storage-lock/go-etcd-storage:go-etcd-storage
-          storage-lock/go-filesystem-storage:go-filesystem-storage
-          storage-lock/go-http-storage:go-http-storage
-          storage-lock/go-kv-storage:go-kv-storage
-          storage-lock/go-ledisdb-storage:go-ledisdb-storage
-          storage-lock/go-leveldb-storage:go-leveldb-storage
-          storage-lock/go-memcache-storage:go-memcache-storage
-          storage-lock/go-memory-storage:go-memory-storage
-          storage-lock/go-mysql-storage:go-mysql-storage
-          storage-lock/go-postgresql-storage:go-postgresql-storage
-          storage-lock/go-redis-storage:go-redis-storage
-          storage-lock/go-rocksdb-storage:go-rocksdb-storage
-          storage-lock/go-s3-storage:go-s3-storage
-          storage-lock/go-sql-based-storage:go-sql-based-storage
-          storage-lock/go-sqlite3-storage:go-sqlite3-storage
-          storage-lock/go-storage:go-storage
-          storage-lock/go-storage-lock:go-storage-lock
-          storage-lock/go-zookeeper-storage:go-zookeeper-storage
-          "
-          for pair in $siblings; do
-            repo="${pair%%:*}"
-            dir="${pair##*:}"
-            git clone --depth 1 "https://x-access-token:${GITHUB_TOKEN}@github.com/${repo}.git" "${dir}"
-          done
+      # The integration module consumes published storage backends. Keep CI independent
+      # of organization-private sibling repository credentials.
+      - name: Prepare dependencies
+        working-directory: go-storage-lock-test
+        run: go mod download
 
       - name: Set up Go
         uses: actions/setup-go@v5
