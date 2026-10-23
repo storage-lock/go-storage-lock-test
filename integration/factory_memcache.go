@@ -1,4 +1,4 @@
-package storage_lock
+package integration
 
 import (
 	"context"
@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	memcache_storage "github.com/storage-lock/go-memcache-storage"
 	"github.com/storage-lock/go-storage"
 	storage_lock "github.com/storage-lock/go-storage-lock"
-	"github.com/bradfitz/gomemcache/memcache"
 )
 
 // MemcacheStorageFactory 为 MemcacheStorage 实现 StorageLockTestFactory

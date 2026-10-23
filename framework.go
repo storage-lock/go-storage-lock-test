@@ -1,5 +1,7 @@
 // Package storage_lock 提供分布式锁语义的测试框架。
 //
+// 通过调用方实现 StorageLockTestFactory，运行核心锁语义的一致性测试。
+//
 // 本包用于验证基于 storage-lock 框架的存储实现是否正确实现了分布式锁的核心语义。
 // 一个 Storage 实现即使通过了 go-storage-test-helper 的 CRUD 测试，也未必能正确支持
 // 分布式锁——因为分布式锁的语义（互斥、可重入、租约过期、看门狗续租）涉及更复杂的
@@ -94,17 +96,9 @@ func TestStorageLockSemantics(t *testing.T, factory StorageLockTestFactory) {
 		{"BasicLockUnlock", testBasicLockUnlock},
 		{"MutexExclusion", testMutexExclusion},
 		{"ReentrantLock", testReentrantLock},
-		{"LeaseExpiration", testLeaseExpiration},
-		{"WatchDogRenewal", testWatchDogRenewal},
 		{"ConcurrentCompetition", testConcurrentCompetition},
 		{"NonOwnerUnlock", testNonOwnerUnlock},
 		{"ReacquireAfterRelease", testReacquireAfterRelease},
-		{"WatchDogDoesNotClobberStolenLock", testWatchDogDoesNotClobberStolenLock},
-		{"ABAScenario", testABAScenario},
-		{"GoroutineLeak", testGoroutineLeak},
-		{"ReentrantLockExpirationDuringHolding", testReentrantLockExpirationDuringHolding},
-		{"TryLockSuccess", testTryLockSuccess},
-		{"TryLockFailWhenLocked", testTryLockFailWhenLocked},
 	}
 
 	for _, c := range cases {

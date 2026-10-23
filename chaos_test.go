@@ -25,10 +25,10 @@ import (
 type chaosStorage struct {
 	inner storage.Storage
 
-	mu        sync.Mutex
+	mu         sync.Mutex
 	pauseUntil time.Time
-	skew      time.Duration
-	failOps   int
+	skew       time.Duration
+	failOps    int
 }
 
 var errChaosInjected = errors.New("chaos: injected storage failure")

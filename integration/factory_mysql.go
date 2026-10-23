@@ -1,4 +1,4 @@
-package storage_lock
+package integration
 
 import (
 	"context"

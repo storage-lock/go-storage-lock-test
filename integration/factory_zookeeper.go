@@ -1,4 +1,4 @@
-package storage_lock
+package integration
 
 import (
 	"context"
@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/go-zookeeper/zk"
-	zookeeper_storage "github.com/storage-lock/go-zookeeper-storage"
 	"github.com/storage-lock/go-storage"
 	storage_lock "github.com/storage-lock/go-storage-lock"
+	zookeeper_storage "github.com/storage-lock/go-zookeeper-storage"
 )
 
 // ZookeeperStorageFactory 为 ZookeeperStorage 实现 StorageLockTestFactory

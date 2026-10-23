@@ -38,8 +38,10 @@ jobs:
         working-directory: go-storage-lock-test
         run: go vet ./...
 
-      # 外部服务后端（redis/etcd/mysql/mongo/s3 等）由环境变量保护自动 skip，
-      # 这里跑的是不需要外部服务的本地后端语义套件。
-      - name: Test
+      - name: Test core semantics
         working-directory: go-storage-lock-test
         run: go test -race -count=1 ./...
+
+      - name: Build private backend integration adapters
+        working-directory: go-storage-lock-test/integration
+        run: go test -race -run '^$' .

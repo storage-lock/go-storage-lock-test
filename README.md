@@ -73,21 +73,25 @@ func TestMyStorageLockSemantics(t *testing.T) {
 }
 ```
 
-## 框架自带的测试
+## 框架自带的公开测试
 
-不依赖外部服务的后端一次跑完：
+根模块只依赖可公开下载的 memory、filesystem 和 SQLite storage adapters。根目录执行：
 
 ```bash
-go test -count=1 -timeout 60m -run TestLocalBackends .
+GOWORK=off go test -race ./...
 ```
 
-覆盖 memory、filesystem、leveldb、kv、http、sqlite3。
-
-全部后端（含依赖外部服务的）用 `run-all.sh`。它先导出每个服务的连接环境变量，再跑整个包的测试；哪个服务没在监听，对应的 `Test*StorageLockSemantics` 就跳过，不会让整次运行失败。RocksDB 不需要服务，但需要本机的 `librocksdb`。
+组织内的私有 backend adapters 已隔离在 `integration/` 嵌套模块。具备组织私有仓访问权限、并且所在工作区包含对应 sibling modules 时，可在完整工作区运行：
 
 ```bash
-docker compose -f docker/docker-compose.yml up -d
-./run-all.sh
+cd integration
+GOWORK=off go test -race -count=1 ./...
+```
+
+依赖外部服务的 adapter 通过 `STORAGE_LOCK_*` 环境变量控制；未配置连接时对应语义测试跳过。RocksDB 还需要本机 `librocksdb`。
+
+本地完整工作区的服务启动方式仍见 `docker/docker-compose.yml` 和 `run-all.sh`；该脚本主要用于授权工作区，不是公开CI入口。
+
 ```
 
 `docker/docker-compose.yml` 里的端口刻意避开默认值（Redis 16379、MySQL 13307、PostgreSQL 15432、memcache 11212、LedisDB 16380），避免和机器上已有的实例冲突。环境变量已设置时脚本沿用已有的值。
@@ -97,3 +101,18 @@ docker compose -f docker/docker-compose.yml up -d
 - **隔离性**：每个测试用例使用独立的 lockId，状态互不干扰
 - **NoopWatchDog**：提供不续租的看门狗，精确模拟"持有者宕机"场景，测试租约过期
 - **并发竞争测试**：用原子计数器验证临界区互斥性和计数器完整性，是验证 CAS 正确性的核心
+
+
+## Private backend integration suite
+
+The default package and CI run public/core tests without organization-private modules.
+Backend adapters that require private storage repositories are guarded by the `integration`
+build tag. In the authorized organization workspace, run the full suite with:
+
+```sh
+go test -tags=integration -race ./...
+```
+
+External-service tests skip unless their documented `STORAGE_LOCK_*` connection
+variables are set. The integration build requires read access to the private storage
+repositories listed by the module's local workspace setup.

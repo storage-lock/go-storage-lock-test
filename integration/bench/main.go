@@ -1,3 +1,5 @@
+//go:build integration
+
 // 压测基准：对 5 种存储（memory/redis/mysql/etcd/leveldb）跑分布式锁的
 // 延迟与吞吐基准，输出 markdown 报告。
 //

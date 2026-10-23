@@ -17,11 +17,6 @@ var localBackends = []struct {
 	{"filesystem", func(t *testing.T) storage_lock.StorageLockTestFactory {
 		return storage_lock.NewFileSystemStorageFactory(t)
 	}},
-	{"leveldb", func(t *testing.T) storage_lock.StorageLockTestFactory {
-		return storage_lock.NewLevelDBStorageFactory(t)
-	}},
-	{"kv", func(t *testing.T) storage_lock.StorageLockTestFactory { return storage_lock.NewKVStorageFactory(t) }},
-	{"http", func(t *testing.T) storage_lock.StorageLockTestFactory { return storage_lock.NewHTTPStorageFactory(t) }},
 	{"sqlite3", func(t *testing.T) storage_lock.StorageLockTestFactory {
 		return storage_lock.NewSqlite3StorageFactory(t)
 	}},
