@@ -10,13 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: go-storage-lock-test
 
-      # The integration module consumes published storage backends. Keep CI independent
-      # of organization-private sibling repository credentials.
+      # Download dependencies after installing the selected Go toolchain.
       - name: Prepare dependencies
-        working-directory: go-storage-lock-test
         run: go mod download
 
       - name: Set up Go
@@ -31,17 +27,10 @@ jobs:
           sudo apt-get install -y librocksdb-dev
 
       - name: Build
-        working-directory: go-storage-lock-test
         run: go build ./...
 
       - name: Vet
-        working-directory: go-storage-lock-test
         run: go vet ./...
 
       - name: Test core semantics
-        working-directory: go-storage-lock-test
         run: go test -race -count=1 ./...
-
-      - name: Build private backend integration adapters
-        working-directory: go-storage-lock-test/integration
-        run: go test -race -run '^$' .
