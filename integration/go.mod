@@ -21,7 +21,7 @@ require (
 	github.com/storage-lock/go-rocksdb-storage v0.0.1
 	github.com/storage-lock/go-s3-storage v0.0.2
 	github.com/storage-lock/go-storage v0.1.0
-	github.com/storage-lock/go-storage-lock v0.0.7
+	github.com/storage-lock/go-storage-lock v0.1.0
 	github.com/storage-lock/go-storage-lock-test v0.0.2
 	github.com/storage-lock/go-zookeeper-storage v0.0.1
 	go.etcd.io/etcd/client/v3 v3.7.3
