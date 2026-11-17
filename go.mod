@@ -8,7 +8,7 @@ require (
 	github.com/storage-lock/go-filesystem-storage v0.0.2
 	github.com/storage-lock/go-memory-storage v0.0.1
 	github.com/storage-lock/go-sqlite3-storage v0.0.2
-	github.com/storage-lock/go-storage v0.0.3
+	github.com/storage-lock/go-storage v0.1.0
 	github.com/storage-lock/go-storage-lock v0.0.7
 	github.com/stretchr/testify v1.12.1
 )
