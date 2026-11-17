@@ -13,6 +13,7 @@ func storageLockSuites(t *testing.T, factory framework.StorageLockTestFactory) {
 	framework.TestStorageLockSemantics(t, factory)
 	framework.TestStorageLock_ReadWriteLockSemantics(t, factory)
 	framework.TestStorageLock_FairQueueSemantics(t, factory)
+	framework.TestStorageLock_FairLockSemantics(t, factory)
 	framework.TestStorageLock_OwnershipSemantics(t, factory)
 	framework.TestStorageLock_LifecycleSemantics(t, factory)
 }

@@ -30,6 +30,7 @@ func TestLocalBackends(t *testing.T) {
 		storage_lock.TestStorageLockSemantics,
 		storage_lock.TestStorageLock_ReadWriteLockSemantics,
 		storage_lock.TestStorageLock_FairQueueSemantics,
+		storage_lock.TestStorageLock_FairLockSemantics,
 		storage_lock.TestStorageLock_OwnershipSemantics,
 		storage_lock.TestStorageLock_LifecycleSemantics,
 	}

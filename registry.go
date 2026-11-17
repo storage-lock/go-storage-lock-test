@@ -72,6 +72,7 @@ func TestRegisteredBackends(t *testing.T) {
 		TestStorageLockSemantics,
 		TestStorageLock_ReadWriteLockSemantics,
 		TestStorageLock_FairQueueSemantics,
+		TestStorageLock_FairLockSemantics,
 		TestStorageLock_OwnershipSemantics,
 		TestStorageLock_LifecycleSemantics,
 	}
