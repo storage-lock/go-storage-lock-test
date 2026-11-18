@@ -86,5 +86,3 @@ require (
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/ini.v1 v1.67.3 // indirect
 )
-
-replace github.com/storage-lock/go-storage-lock-test => ..
