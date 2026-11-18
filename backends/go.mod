@@ -52,7 +52,7 @@ require (
 	github.com/storage-lock/go-sqlite3-storage v0.0.2
 	github.com/storage-lock/go-sqlserver-storage v0.0.3
 	github.com/storage-lock/go-storage v0.1.0
-	github.com/storage-lock/go-storage-lock-test v0.0.2
+	github.com/storage-lock/go-storage-lock-test v0.1.0
 	github.com/storage-lock/go-sybase-storage v0.0.2
 	github.com/storage-lock/go-teradata-storage v0.0.2
 	github.com/storage-lock/go-tidb-storage v0.0.3
