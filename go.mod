@@ -1,6 +1,6 @@
 module github.com/storage-lock/go-storage-lock-test
 
-go 1.26.0
+go 1.23
 
 require (
 	github.com/golang-infrastructure/go-iterator v0.0.0-20230524171120-56988a9b127c
